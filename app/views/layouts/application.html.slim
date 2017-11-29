@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    title SapotMember
+    /![if IE] link rel="shortcut icon" href="/assets/favicon.ico"/
+    / = display_meta_tags
+    meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
+    meta content="width=device-width, initial-scale=1.0" name="viewport" /
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag  '//cdn.optimizely.com/js/5204502522.js'
+    = csrf_meta_tags
+
+  = render "layouts/header"
+  =yield
+
+/ <!DOCTYPE html>
+/ <html>
+/ <head>
+/   <title>SapotMember</title>
+/   <link rel="icon" type="images/png" href="SapotMember.png" />
+/   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+/   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+/   <%= csrf_meta_tags %>
+/ </head>
+/ <body>
+/   <%= render "layouts/header" %>
+/ <%= yield %>
+
+
+/ </body>
+/ </html>

@@ -1,0 +1,15 @@
+I"Ê(function() {
+  $(function() {
+    var autocomplete, destination_location;
+    if (document.getElementById('gig_location') !== null) {
+      destination_location = document.getElementById('gig_location');
+      autocomplete = new google.maps.places.Autocomplete(destination_location);
+      return autocomplete.addListener('place_changed', function() {
+        var place;
+        return place = autocomplete.getPlace();
+      });
+    }
+  });
+
+}).call(this);
+:ET

@@ -1,0 +1,112 @@
+.profile
+  .profile_div style="padding: 36px;color:white;"
+    -if current_user.admin == true
+      = link_to "Admin Page", rails_admin_path, class: "ui teal button", style:"float:right;", target: :_blank
+    h1 Profile
+    = form_for(:profile, url: edit_profile_users_path, method: :post, html: { autocomplete: "off" }) do |f|
+      .avatar_uploader_block
+        -if current_user.avatar.present?
+          = image_tag current_user.avatar, class: 'profile_avatar'
+        -else
+          = image_tag image_url('default-img.png'), class: 'profile_avatar'
+      br
+      = f.file_field :avatar
+      h1 About
+      -if current_user.about.present?
+        = f.text_area :about, value: current_user.about,placeholder:"Tell us about yourself", style: "width: 100%;height: 100px;padding: 16px;"
+      -else
+        = f.text_area :about,placeholder:"Tell us about yourself", style: "width: 100%;height: 100px;padding: 16px;"
+      = f.submit "Save Profile", class: "ui primary button", style: "float: right;background: #f15f41;"
+    br
+    br
+    .white_div
+      h4 
+        |Education
+        = link_to "Add Education", "#", class: "ui button education_edit", id: "education"
+      -if current_user.educations.present?
+        -current_user.educations.each do |education|
+          .sub_div style="padding: 16px 27px 17px 27px;border: 1px solid rgba(128, 128, 128, 0.37);margin-top: 25px;"
+            .education_details id="education_details#{education.id}"
+              h4
+                = education.institure_name
+                i.edit.icon style="float:right;font-size:30px;color:gray;" id="#{education.id}"
+              p style="margin-top: -15px;" = education.description
+            .edit_education_details.hide id="edit_education_details#{education.id}"
+              = form_for(:education, url: edit_profile_users_path, method: :post, html: { autocomplete: "off" }) do |f|
+                = f.hidden_field :id, value: education.id
+                = f.text_field :institure_name, value: education.institure_name,required: true, style: "width: 100%;height: 46px;padding: 16px;margin-bottom: 27px;margin-top: 14px;"
+                = f.text_area :description, value:  education.description, required: true, style: "width: 100%;height: 100px;padding: 16px;"
+                br
+                br
+                =f.submit "Save", class: "ui primary button", style: "float:right;background: #f15f41;"
+                =link_to "Cancel", "", class: "ui primary button", style: "float:right;background: gray;"
+                br
+                br
+    .white_div
+      h4 
+        |Skills
+        = link_to "Add Skills", "#", class: "ui button education_edit", id: "user_skill"
+      br
+      -if current_user.user_skills.present?
+        -current_user.user_skills.each do |user_skill|
+          .button.ui.primary.gray.basic.button
+            = user_skill.skill
+          br
+          br
+
+  .ui.small.modal.education style="text-align: center;padding: 55px;height: 394px;"
+    h3 Add Education
+    = form_for(:education, url: edit_profile_users_path, method: :post, html: { autocomplete: "off" }) do |f|
+      = f.text_field :institure_name, placeholder: "Name of Institute",required: true, style: "width: 100%;height: 46px;padding: 16px;margin-bottom: 27px;margin-top: 14px;"
+      = f.text_area :description, placeholder: "About Institute", required: true, style: "width: 100%;height: 100px;padding: 16px;"
+      br
+      br
+      = f.submit "Save", class: "ui primary button", style: "float: right;background: #f15f41;"
+
+  .ui.small.modal.skills style="text-align: center;padding: 55px;height: 394px;"
+    h3 Select Skills
+    -value = ""
+    -if Skill.all.present?
+      -Skill.all.each do |skill|
+        -if current_user.user_skills.find_by(skill: skill.name).present?
+          -style = "background: #f25f42 !important;color: white !important;"
+          -value += "#{skill.name},"
+        .button.ui.primary.gray.basic.button id="#{skill.name}" style="margin-bottom: 16px;margin-right: 20px;#{style}"
+          = skill.name
+      = form_for(:user_skills, url: edit_profile_users_path, method: :post, html: { autocomplete: "off" }) do |f|
+        = f.hidden_field :skill, placeholder: "About Institute", value: value, required: true, style: "width: 100%;height: 100px;padding: 16px;"
+        br
+        br
+        = f.submit "Save", class: "ui primary button", style: "float: right;background: #f15f41;"
+        =link_to "Cancel", "", class: "ui primary button", style: "float:right;background: gray;"
+
+javascript:
+  $('#education').on('click', function(evt) {
+    $(".ui.small.modal.education").modal('show');
+    return evt.preventDefault();
+  });
+  $('.edit.icon').on('click', function(evt) {
+    document.getElementById('education_details' + evt.target.id).className = "education_details hide"
+    document.getElementById('edit_education_details' + evt.target.id).className = "edit_education_details"
+  });
+  $('.button.ui.primary.gray.basic.button').on('click', function(evt) {
+    if (evt.target.style.background !== "rgb(242, 95, 66)"){
+      evt.target.style = "background: #f25f42 !important;color: white !important;";
+      if (document.getElementById('user_skills_skill').value !== ""){
+        document.getElementById('user_skills_skill').value += "," + evt.target.id;
+      }else{
+        document.getElementById('user_skills_skill').value += evt.target.id;
+      };
+    }else{
+      evt.target.style = "background: transparent !important;color:#1678c2 !important";
+      debugger
+      var skill_array = document.getElementById('user_skills_skill').value.split(",")
+      var new_array = $(skill_array).not([evt.target.id]).get();
+      document.getElementById('user_skills_skill').value = new_array;
+    };
+  });
+  $('#user_skill').on('click', function(evt) {
+    $(".ui.small.modal.skills").modal('show');
+    return evt.preventDefault();
+  });
+

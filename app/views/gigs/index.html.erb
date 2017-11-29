@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>We currently have <strong><%= @gigs.total_count %></strong> jobs from <strong><%= @users.count %></strong> Job Providers</h1>
+  <%= form_tag search_gigs_path, method: :get do |f| %>
+    <%= text_field_tag :search, nil, placeholder: "Example Software Developer", class: "col-md-9 input-lg" %>
+    <%= submit_tag "Search", class: "col-md-3 btn2 btn-primary input-lg" %>
+  <% end %>
+</div>
+
+<%= render "layouts/gig_listings" %>

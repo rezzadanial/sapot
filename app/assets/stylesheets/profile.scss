@@ -1,0 +1,21 @@
+// .profile_div
+//   padding: 36px
+.profile{
+  .profile_avatar{
+    width: 20%;
+    height: 150px;
+  }
+  .white_div{
+    background: white;
+    color: black;
+    padding: 22px;
+    margin-top: 32px;
+    border-radius: 4px;
+  }
+  .education_edit{
+    float: right;
+    margin-top: -7px !important;
+    background: #f25f42 !important;
+    color: white !important;
+  }
+}
